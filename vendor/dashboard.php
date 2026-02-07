@@ -18,6 +18,13 @@ if (!$vendor) {
 
 $vendor_id = $vendor['vendor_id'];
 
+// Set default values for optional fields
+$vendor['verified'] = $vendor['verified'] ?? false;
+$vendor['subscription_type'] = $vendor['subscription_type'] ?? 'free';
+$vendor['subscription_expires_at'] = $vendor['subscription_expires_at'] ?? null;
+$vendor['rating_average'] = $vendor['rating_average'] ?? 0;
+$vendor['total_reviews'] = $vendor['total_reviews'] ?? 0;
+
 // Get statistics
 $stats = [];
 
@@ -64,34 +71,67 @@ $low_stock = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Vendor Dashboard - MarketConnect</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../css/mobile-responsive.css">
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-green-600">🏪 MarketConnect</h1>
-                    <span class="ml-4 px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">VENDOR</span>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <a href="products.php" class="text-gray-700 hover:text-green-600">
-                        <i class="fas fa-box"></i> Products
-                    </a>
-                    <a href="orders.php" class="text-gray-700 hover:text-green-600">
-                        <i class="fas fa-shopping-cart"></i> Orders
-                    </a>
-                    <a href="messages.php" class="text-gray-700 hover:text-green-600">
-                        <i class="fas fa-comments"></i> Messages
-                    </a>
-                    <span class="text-gray-700"><?php echo htmlspecialchars($vendor['business_name']); ?></span>
-                    <a href="../logout.php" class="text-red-600 hover:text-red-800">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <h1 class="text-xl md:text-2xl font-bold text-green-600">🏪 MarketConnect</h1>
+                <span class="ml-2 md:ml-4 px-2 md:px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">VENDOR</span>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                <a href="products.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-box"></i><span class="hidden lg:inline"> Products</span>
+                </a>
+                <a href="orders.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-shopping-cart"></i><span class="hidden lg:inline"> Orders</span>
+                </a>
+                <a href="messages.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-comments"></i><span class="hidden lg:inline"> Messages</span>
+                </a>
+                <a href="../index.php" class="text-green-600 hover:text-green-800 font-semibold">
+                    <i class="fas fa-store-alt"></i><span class="hidden lg:inline"> Marketplace</span>
+                </a>
+                <span class="text-gray-700 hidden lg:inline"><?php echo htmlspecialchars($vendor['business_name']); ?></span>
+                <a href="../logout.php" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-sign-out-alt"></i><span class="hidden lg:inline"> Logout</span>
+                </a>
             </div>
         </div>
-    </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <a href="products.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-box mr-2"></i> Products
+            </a>
+            <a href="orders.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-shopping-cart mr-2"></i> Orders
+            </a>
+            <a href="messages.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-comments mr-2"></i> Messages
+            </a>
+            <a href="../index.php" class="block py-2 text-green-600 hover:bg-green-50">
+                <i class="fas fa-store-alt mr-2"></i> Browse Marketplace
+            </a>
+            <div class="py-2 px-4 bg-gray-100 text-gray-700 text-sm">
+                <?php echo htmlspecialchars($vendor['business_name']); ?>
+            </div>
+            <a href="../logout.php" class="block py-2 text-red-600 hover:bg-red-50">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+        </div>
+    </div>
+</nav>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Business Info Banner -->
@@ -101,7 +141,7 @@ $low_stock = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($vendor['business_name']); ?></h2>
                     <p class="text-green-100 mt-1">
                         <i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($vendor['market_name']); ?> 
-                        <?php if ($vendor['stall_number']): ?>
+                        <?php if (!empty($vendor['stall_number'])): ?>
                             - Stall <?php echo htmlspecialchars($vendor['stall_number']); ?>
                         <?php endif; ?>
                     </p>
@@ -119,16 +159,18 @@ $low_stock = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="text-right">
                     <p class="text-sm text-green-100">Subscription</p>
-                    <p class="text-xl font-bold uppercase"><?php echo $vendor['subscription_type']; ?></p>
+                    <p class="text-xl font-bold uppercase"><?php echo htmlspecialchars($vendor['subscription_type']); ?></p>
                     <?php if ($vendor['subscription_expires_at']): ?>
                         <p class="text-xs text-green-100">Expires: <?php echo date('M d, Y', strtotime($vendor['subscription_expires_at'])); ?></p>
+                    <?php else: ?>
+                        <p class="text-xs text-green-100">No expiration</p>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6 mb-8 stats-grid">
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
@@ -285,5 +327,6 @@ $low_stock = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+    <script src="../js/mobile-nav.js"></script>
 </body>
 </html>

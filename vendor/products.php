@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all products
-$stmt = $db->prepare("SELECT p.*, c.category_name FROM products p LEFT JOIN categories c ON p.category_id = c.category_id WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
+$stmt = $db->prepare("SELECT p.* FROM products p WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
 $stmt->execute([$vendor_id]);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get categories
-$stmt = $db->query("SELECT * FROM categories ORDER BY category_name");
+$categories = []; // Temporarily disable categories
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -78,22 +78,62 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-gray-50">
     <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center space-x-6">
-                    <a href="dashboard.php" class="text-2xl font-bold text-green-600">🏪 MarketConnect</a>
-                    <a href="dashboard.php" class="text-gray-700 hover:text-green-600">Dashboard</a>
-                    <a href="products.php" class="text-green-600 font-semibold">Products</a>
-                    <a href="orders.php" class="text-gray-700 hover:text-green-600">Orders</a>
-                </div>
-                <div class="flex items-center">
-                    <a href="../logout.php" class="text-red-600 hover:text-red-800">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <h1 class="text-xl md:text-2xl font-bold text-green-600">🏪 MarketConnect</h1>
+                <span class="ml-2 md:ml-4 px-2 md:px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">VENDOR</span>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                <a href="products.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-box"></i><span class="hidden lg:inline"> Products</span>
+                </a>
+                <a href="orders.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-shopping-cart"></i><span class="hidden lg:inline"> Orders</span>
+                </a>
+                <a href="messages.php" class="text-gray-700 hover:text-green-600">
+                    <i class="fas fa-comments"></i><span class="hidden lg:inline"> Messages</span>
+                </a>
+                <a href="../index.php" class="text-green-600 hover:text-green-800 font-semibold">
+                    <i class="fas fa-store-alt"></i><span class="hidden lg:inline"> Marketplace</span>
+                </a>
+                <span class="text-gray-700 hidden lg:inline"><?php echo htmlspecialchars($vendor['business_name']); ?></span>
+                <a href="../logout.php" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-sign-out-alt"></i><span class="hidden lg:inline"> Logout</span>
+                </a>
             </div>
         </div>
-    </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <a href="products.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-box mr-2"></i> Products
+            </a>
+            <a href="orders.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-shopping-cart mr-2"></i> Orders
+            </a>
+            <a href="messages.php" class="block py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-comments mr-2"></i> Messages
+            </a>
+            <a href="../index.php" class="block py-2 text-green-600 hover:bg-green-50">
+                <i class="fas fa-store-alt mr-2"></i> Browse Marketplace
+            </a>
+            <div class="py-2 px-4 bg-gray-100 text-gray-700 text-sm">
+                <?php echo htmlspecialchars($vendor['business_name']); ?>
+            </div>
+            <a href="../logout.php" class="block py-2 text-red-600 hover:bg-red-50">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+        </div>
+    </div>
+</nav>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex justify-between items-center mb-6">
@@ -116,7 +156,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <!-- Products Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6 mb-8 stats-grid">
             <?php foreach ($products as $product): ?>
             <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
                 <div class="p-6">
@@ -286,5 +326,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     </script>
+    <script src="../js/mobile-nav.js"></script>
 </body>
 </html>

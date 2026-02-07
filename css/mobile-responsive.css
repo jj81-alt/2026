@@ -1,0 +1,466 @@
+/* css/mobile-responsive.css */
+/* MarketConnect - Mobile & Tablet Responsive Styles */
+
+/* ========================================
+   GLOBAL MOBILE FIXES
+   ======================================== */
+
+/* Prevent text zoom on iOS */
+input, select, textarea, button {
+    font-size: 16px !important;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+    button, a, .clickable {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* ========================================
+   NAVIGATION - MOBILE MENU
+   ======================================== */
+
+/* Hide desktop menu on mobile */
+@media (max-width: 768px) {
+    nav .hidden-mobile {
+        display: none !important;
+    }
+    
+    /* Mobile menu button */
+    .mobile-menu-button {
+        display: block !important;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+    }
+    
+    /* Mobile dropdown menu */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: white;
+        padding: 1rem 0;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    .mobile-menu.active {
+        display: flex;
+    }
+    
+    .mobile-menu a {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+}
+
+/* Desktop menu visibility */
+@media (min-width: 769px) {
+    .mobile-menu-button {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 1.875rem !important; /* 30px */
+        line-height: 1.2;
+    }
+    
+    .hero-section p {
+        font-size: 1rem !important;
+    }
+    
+    .hero-search {
+        flex-direction: column !important;
+    }
+    
+    .hero-search input {
+        border-radius: 0.5rem 0.5rem 0 0 !important;
+        width: 100% !important;
+    }
+    
+    .hero-search button {
+        border-radius: 0 0 0.5rem 0.5rem !important;
+        width: 100% !important;
+    }
+}
+
+/* ========================================
+   MAP - RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    #map {
+        height: 300px !important;
+    }
+    
+    .map-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .map-buttons button {
+        width: 100%;
+    }
+}
+
+@media (min-width: 769px) {
+    #map {
+        height: 500px;
+    }
+}
+
+/* ========================================
+   CATEGORY CARDS
+   ======================================== */
+
+@media (max-width: 640px) {
+    .category-card {
+        padding: 1rem !important;
+    }
+    
+    .category-card i {
+        font-size: 2.5rem !important;
+    }
+    
+    .category-card p {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ========================================
+   VENDOR CARDS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .vendor-card {
+        margin-bottom: 1rem;
+    }
+    
+    .vendor-card .p-6 {
+        padding: 1rem !important;
+    }
+    
+    .vendor-card h3 {
+        font-size: 1.125rem !important;
+    }
+}
+
+/* ========================================
+   TABLES - HORIZONTAL SCROLL
+   ======================================== */
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+    
+    table th, table td {
+        white-space: nowrap;
+        padding: 0.5rem !important;
+        font-size: 0.875rem !important;
+    }
+}
+
+/* ========================================
+   ADMIN SIDEBAR
+   ======================================== */
+
+@media (max-width: 1024px) {
+    /* Hide sidebar on tablet/mobile */
+    aside.w-64 {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100vh;
+        z-index: 9999;
+        transition: left 0.3s ease;
+    }
+    
+    aside.w-64.mobile-open {
+        left: 0;
+    }
+    
+    /* Add mobile menu toggle */
+    .admin-mobile-toggle {
+        display: block !important;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 10000;
+        background: #10b981;
+        color: white;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Overlay when sidebar is open */
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        display: none;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+@media (min-width: 1025px) {
+    .admin-mobile-toggle {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   VENDOR DASHBOARD STATS
+   ======================================== */
+
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .stat-card .text-3xl {
+        font-size: 1.5rem !important;
+    }
+    
+    .stat-card .text-sm {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ========================================
+   MODALS - MOBILE FRIENDLY
+   ======================================== */
+
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem !important;
+        max-height: 90vh !important;
+        overflow-y: auto;
+        width: calc(100% - 2rem) !important;
+        max-width: 100% !important;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.25rem !important;
+    }
+    
+    .modal-content .grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ========================================
+   FORMS - MOBILE FRIENDLY
+   ======================================== */
+
+@media (max-width: 768px) {
+    form .grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    form input, form select, form textarea {
+        width: 100% !important;
+    }
+    
+    form button {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+}
+
+/* ========================================
+   MAP MODAL - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .map-modal-header {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        padding: 1rem !important;
+    }
+    
+    .map-modal-header h2 {
+        font-size: 1.25rem !important;
+    }
+    
+    .map-modal-header .flex-1 {
+        width: 100% !important;
+    }
+    
+    .store-sidebar {
+        width: 100% !important;
+        height: 60vh !important;
+        top: auto !important;
+        bottom: 0 !important;
+        transform: translateY(100%) !important;
+    }
+    
+    .store-sidebar.hidden {
+        transform: translateY(100%) !important;
+    }
+    
+    .store-sidebar:not(.hidden) {
+        transform: translateY(0) !important;
+    }
+}
+
+/* ========================================
+   MESSAGES PAGE - MOBILE
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .messages-layout {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .conversation-list {
+        height: 300px !important;
+        min-height: 300px !important;
+    }
+    
+    .messages-container {
+        height: 400px !important;
+        min-height: 400px !important;
+    }
+}
+
+/* ========================================
+   ORDERS PAGE - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .status-cards {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+    
+    .status-card p {
+        font-size: 0.75rem !important;
+    }
+    
+    .status-card .text-2xl {
+        font-size: 1.25rem !important;
+    }
+}
+
+/* ========================================
+   PRODUCTS GRID - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .product-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .mobile-hidden {
+        display: none !important;
+    }
+    
+    .mobile-full-width {
+        width: 100% !important;
+    }
+    
+    .mobile-text-center {
+        text-align: center !important;
+    }
+    
+    .mobile-p-2 {
+        padding: 0.5rem !important;
+    }
+    
+    .mobile-mb-2 {
+        margin-bottom: 0.5rem !important;
+    }
+}
+
+/* Desktop only */
+@media (min-width: 769px) {
+    .desktop-hidden {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   CONTAINER PADDING
+   ======================================== */
+
+@media (max-width: 768px) {
+    .max-w-7xl {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    .py-8 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+}
+
+/* ========================================
+   TEXT SIZES - RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .text-5xl {
+        font-size: 1.875rem !important;
+    }
+    
+    .text-4xl {
+        font-size: 1.5rem !important;
+    }
+    
+    .text-3xl {
+        font-size: 1.25rem !important;
+    }
+    
+    .text-2xl {
+        font-size: 1.125rem !important;
+    }
+}
+
+/* ========================================
+   BUTTONS - MOBILE FRIENDLY
+   ======================================== */
+
+@media (max-width: 768px) {
+    .button-group {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .button-group button,
+    .button-group a {
+        width: 100% !important;
+    }
+}
